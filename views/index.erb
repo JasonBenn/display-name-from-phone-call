@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello Client Monkey</title>
+    <script type="text/javascript" src="//static.twilio.com/libs/twiliojs/1.1/twilio.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <link href="//static0.twilio.com/packages/quickstart/client.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+      Twilio.Device.setup("<%= token %>", { debug: true });
+      Twilio.Device.ready(function(device) {
+        $('#log').text('Ready');
+      });
+      Twilio.Device.error(function(error) {
+        $('#log').text('Error: ' + error.message);
+      });
+      Twilio.Device.connect(function(conn) {
+        $('#log').text('Successfully established call...');
+      });
+      Twilio.Device.disconnect(function() {
+        $('#log').text('Call ended');
+      });
+      Twilio.Device.incoming(function(conn) {
+        $('#log').text('Incoming connection from ' + conn.parameters.From);
+        conn.accept();
+      });
+      function hangup() {
+        Twilio.Device.disconnectAll();
+      }
+      function call() {
+        Twilio.Device.connect();
+      }
+    </script>
+  </head>
+
+  <body>
+    <button class="call" onclick="call();">Call</button>
+    <button class="hangup" onclick="hangup();">Hang up</button>
+    <div id="log">Loading pigeons...</div>
+  </body>
+</html>
